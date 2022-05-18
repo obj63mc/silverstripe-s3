@@ -11,46 +11,34 @@ SilverStripe\Core\Injector\Injector:
       configuration:
         region: '`AWS_REGION`'
         version: latest
-  League\Flysystem\Adapter\Local:
-    class: League\Flysystem\Adapter\Local
+  Psr\SimpleCache\CacheInterface.s3metadatapublic:
+    factory: SilverStripe\Core\Cache\CacheFactory
     constructor:
-      root: '`TEMP_PATH`'
-
+      namespace: "s3metadatapublic"
   SilverStripe\S3\Adapter\PublicAdapter:
     constructor:
       s3Client: '%$Aws\S3\S3Client'
       bucket: '`AWS_BUCKET_NAME`'
       prefix: '`AWS_PUBLIC_BUCKET_PREFIX`'
-  League\Flysystem\Cached\Storage\Memory.public:
-    class: League\Flysystem\Cached\Storage\Memory
-  League\Flysystem\Cached\Storage\Adapter.public:
-    class: League\Flysystem\Cached\Storage\Adapter
-    constructor:
-      adapter: '%$League\Flysystem\Adapter\Local'
-      file: 's3metadata/public'
-      expire: 259200
   SilverStripe\Assets\Flysystem\PublicAdapter:
     class: SilverStripe\S3\Adapter\PublicCachedAdapter
     constructor:
       adapter: '%$SilverStripe\S3\Adapter\PublicAdapter'
-      cache: '%$League\Flysystem\Cached\Storage\Adapter.public'
-
+      cachenamespace: 's3metadatapublic'
+  Psr\SimpleCache\CacheInterface.s3metadataprotected:
+    factory: SilverStripe\Core\Cache\CacheFactory
+    constructor:
+      namespace: "s3metadataprotected"
   SilverStripe\S3\Adapter\ProtectedAdapter:
     constructor:
       s3Client: '%$Aws\S3\S3Client'
       bucket: '`AWS_BUCKET_NAME`'
       prefix: '`AWS_PROTECTED_BUCKET_PREFIX`'
-  League\Flysystem\Cached\Storage\Adapter.protected:
-      class: League\Flysystem\Cached\Storage\Adapter
-      constructor:
-        adapter: '%$League\Flysystem\Adapter\Local'
-        file: 's3metadata/protected'
-        expire: 259200
   SilverStripe\Assets\Flysystem\ProtectedAdapter:
     class: SilverStripe\S3\Adapter\ProtectedCachedAdapter
     constructor:
       adapter: '%$SilverStripe\S3\Adapter\ProtectedAdapter'
-      cache: '%$League\Flysystem\Cached\Storage\Adapter.protected'
+      cachenamespace: 's3metadataprotected'
 #---
 Name: silverstripes3-assetscore
 Only:
