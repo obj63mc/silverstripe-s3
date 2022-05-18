@@ -269,4 +269,8 @@ abstract class AbstractCacheAdapter implements AdapterInterface {
         return md5($path);
     }
 
+    protected function getAdapter(){
+        return $this->adapter;
+    }
+
 }
