@@ -178,9 +178,9 @@ abstract class AbstractCacheAdapter implements AdapterInterface {
     * {@inheritdoc}
     */
     public function getMetadata($path) {
-        $item = $this->cache->get($this->cachekey($path));
+        $metadata = $this->cache->get($this->cachekey($path));
 
-        if ($item) {
+        if ($metadata) {
             return $metadata;
         }
 
